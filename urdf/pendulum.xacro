@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 2016 Christoph Hintz, UNM, United States of America
+-->
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Pendulum Arm -->
+  <xacro:macro name="pendulum_arm"
+    params="robot_namespace pendulum_radius pendulum_arm_length pendulum_arm_mass arm_length pi color">
+
+    <joint name="${robot_namespace}/pendulum_arm_joint" type="fixed">
+      	<origin xyz="0.135 0 -0.027" rpy="0 0 0" />-->
+      	<parent link="${robot_namespace}/base_link" />
+      	<child link="${robot_namespace}/pendulum_arm_link" />
+    </joint>
+
+    <link name="${robot_namespace}/pendulum_arm_link">
+      
+      	<inertial>
+        	<mass value="${pendulum_arm_mass}" />  <!-- [kg] -->
+        	<origin xyz="${pendulum_arm_length/2} 0 0" />
+         	<inertia 
+	        	ixx="${1/2*pendulum_arm_mass*pendulum_radius*pendulum_radius}" 
+	        	ixy="0.0" 
+	        	ixz="0.0" 
+	        	iyy="${1/12*pendulum_arm_mass*pendulum_arm_length*pendulum_arm_length+1/4*pendulum_arm_mass*pendulum_radius*pendulum_radius}" 
+	        	iyz="0.0" 
+	        	izz="${1/12*pendulum_arm_mass*pendulum_arm_length*pendulum_arm_length+1/4*pendulum_arm_mass*pendulum_radius*pendulum_radius}"/>
+      	</inertial>
+        
+      	<visual>
+      	    <origin xyz="${arm_length/2} 0 0" rpy="0 ${-pi/2} 0" />    
+            <geometry>
+                    <cylinder radius="${pendulum_radius/2}" length="${pendulum_arm_length}"/>
+            </geometry>
+      	</visual>
+
+      	<collision>
+         	<origin xyz="${arm_length/2} 0 0" rpy="0 ${-pi/2} 0" />
+            <geometry>
+                <cylinder radius="${pendulum_radius/2}" length="${pendulum_arm_length}"/>
+            </geometry>
+       	</collision>
+    </link>
+    <gazebo reference="${robot_namespace}/pendulum_arm_link" >
+      	<material>Gazebo/${color}</material>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="pendulum"
+    params="robot_namespace pendulum_radius pendulum_length pendulum_arm_length pendulum_mass arm_length pi color">
+
+	<joint name="${robot_namespace}/pendulum_joint" type="continuous">
+     	<parent link="${robot_namespace}/pendulum_arm_link" />
+        <child link="${robot_namespace}/pendulum_link" />
+        <origin xyz="${pendulum_arm_length} 0 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+       	<dynamics damping="0.005" />
+    </joint>
+
+   	<link name="${robot_namespace}/pendulum_link">
+     
+      	<inertial>
+        	<mass value="${pendulum_mass}" />  
+         	<inertia 
+	        	ixx="${1/3*pendulum_mass*pendulum_length*pendulum_length}" 
+	        	ixy="0.0" 
+	        	ixz="0.0" 
+	        	iyy="${1/3*pendulum_mass*pendulum_length*pendulum_length}" 
+	        	iyz="0.0" 
+	        	izz="${1/2*pendulum_arm_mass*pendulum_radius*pendulum_radius}"/>
+      		<origin xyz="0 0 ${pendulum_length/2}" />
+      	</inertial>
+       
+      	<visual>
+            <geometry>
+                <cylinder radius="${pendulum_radius/2}" length="${pendulum_length}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 ${pendulum_length/2}" />
+      	</visual>
+
+      	<collision>
+            <origin rpy="0 0 0" xyz="0 0 ${pendulum_length/2}" />
+            <geometry>
+                <cylinder radius="${pendulum_radius/2}" length="${pendulum_length}"/>
+            </geometry>
+       </collision>
+    </link>
+ 
+    <gazebo reference="${robot_namespace}/pendulum_link" >
+      	<material>Gazebo/${color}</material>
+    </gazebo>
+  </xacro:macro> 
+
+  <!-- Counterweight -->
+  <xacro:macro name="counterweight"
+    params="robot_namespace counterweight_mass counterweight_length color">
+
+    <joint name="${robot_namespace}/counterweight_joint" type="fixed">
+        <origin xyz="${-counterweight_length-counterweight_length} 0 -0.027" rpy="0 0 0" />-->
+        <parent link="${robot_namespace}/base_link" />
+        <child link="${robot_namespace}/counterweight_link" />
+    </joint>
+
+    <link name="${robot_namespace}/counterweight_link">
+      
+        <inertial>
+          <mass value="${counterweight_mass}" />  <!-- [kg] -->
+          <origin xyz="${counterweight_length} 0 0" />
+          <inertia 
+            ixx="${1/6*counterweight_mass*counterweight_length*counterweight_length}" 
+            ixy="0.0" 
+            ixz="0.0"
+            iyy="${1/6*counterweight_mass*counterweight_length*counterweight_length}" 
+            iyz="0.0"
+            izz="${1/6*counterweight_mass*counterweight_length*counterweight_length}" />
+        </inertial>
+        
+        <visual>
+            <origin xyz="${counterweight_length} 0 0" rpy="0 ${pi/2} 0"/>    
+            <geometry>
+                <box size="0.04 .04 .04"/>
+            </geometry>
+        </visual>
+
+        <collision>
+          <origin xyz="${counterweight_length} 0 0" rpy="0 ${pi/2} 0"/>    
+            <geometry>
+                <box size="0.02 .02 .02"/>
+            </geometry>
+        </collision>
+    </link>
+    <gazebo reference="${robot_namespace}/counterweight_link" >
+        <material>Gazebo/${color}</material>
+    </gazebo>
+  </xacro:macro>
+
+</robot>
+

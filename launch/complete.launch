@@ -1,0 +1,18 @@
+<launch>
+        <node name="Altitude" pkg="pendulum" type="Altitude" output="screen"/>
+        <node name="EnergieControlLateral" pkg="pendulum" type="EnergieControlLateral" output="screen"/>
+        <node name="EnergieControlRotational" pkg="pendulum" type="EnergieControlRotational" output="screen"/>
+	<node name="Lateral_ACC" pkg="pendulum" type="Lateral_ACC" output="screen"/>
+        <node name="LQR_Lateral" pkg="pendulum" type="LQR_Lateral" output="screen"/>
+	<node name="LQR_Reduce_Swing" pkg="pendulum" type="LQR_Reduce_Swing" output="screen"/>
+	<node name="LQR_Rotational" pkg="pendulum" type="LQR_Rotational" output="screen"/>
+        <node name="Motor_Commands" pkg="pendulum" type="Motor_Commands" output="screen"/>
+        <node name="Pitch" pkg="pendulum" type="Pitch" output="screen"/>
+        <node name="Roll" pkg="pendulum" type="Roll" output="screen"/>
+        <node name="Roll_ACC" pkg="pendulum" type="Roll_ACC" output="screen"/>
+        <node name="Rotational_ACC" pkg="pendulum" type="Rotational_ACC" output="screen"/>
+        <node name="Transform" pkg="pendulum" type="Transform" output="screen"/>
+        <node name="X_POS" pkg="pendulum" type="X_POS" output="screen"/>
+        <node name="Y_POS" pkg="pendulum" type="Y_POS" output="screen"/>
+        <node name="Yaw" pkg="pendulum" type="Yaw" output="screen"/>
+</launch>
